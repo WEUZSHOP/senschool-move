@@ -115,45 +115,37 @@ document.addEventListener('DOMContentLoaded', () => {
 
 });
 
-// Ouvrir WhatsApp (Desktop, Mobile ou Web)
-function openWhatsApp(message) {
+// Fonction pour ouvrir WhatsApp avec un message spécifique
+function openWhatsAppWith(message) {
+  const phoneNumber = "221771234567"; // Remplace par ton numéro réel
   const encodedMessage = encodeURIComponent(message);
-  const whatsappNumber = "221771234567"; // Remplace par ton numéro réel
 
-  // URL WhatsApp Desktop / Mobile
-  const whatsappAppUrl = `whatsapp://send?phone=${whatsappNumber}&text=${encodedMessage}`;
+  // URL WhatsApp App / Desktop
+  const appUrl = `whatsapp://send?phone=${phoneNumber}&text=${encodedMessage}`;
 
-  // URL fallback Web
-  const whatsappWebUrl = `https://web.whatsapp.com/send?phone=${whatsappNumber}&text=${encodedMessage}`;
+  // URL WhatsApp Web en fallback
+  const webUrl = `https://web.whatsapp.com/send?phone=${phoneNumber}&text=${encodedMessage}`;
 
-  // Essaye d'ouvrir l'application WhatsApp
   const timeout = setTimeout(() => {
-    // Si WhatsApp Desktop n'est pas installé, bascule vers WhatsApp Web
-    window.open(whatsappWebUrl, "_blank");
-  }, 500); // 500ms avant d'ouvrir fallback
+    window.open(webUrl, "_blank"); // ouvre WhatsApp Web si Desktop non disponible
+  }, 500);
 
-  // Essaie d’ouvrir WhatsApp App
-  window.location.href = whatsappAppUrl;
+  window.location.href = appUrl;
 
-  // Nettoie le timeout si l'utilisateur a réussi à ouvrir l'application
-  window.addEventListener("blur", () => clearTimeout(timeout));
+  window.addEventListener("blur", () => clearTimeout(timeout)); // annule le fallback si App ouverte
 }
 
-// Attache les événements aux boutons
-document.addEventListener('DOMContentLoaded', () => {
-  const startUSA = document.getElementById('startUSA');
-  const whatsappUSA = document.getElementById('whatsappUSA');
+// Boutons spécifiques USA
+const startUSA = document.getElementById('startUSA');
+if (startUSA) {
+  startUSA.addEventListener('click', () => 
+    openWhatsAppWith('Bonjour, je souhaite commencer ma procédure pour les États-Unis.')
+  );
+}
 
-  if (startUSA) {
-    startUSA.addEventListener('click', () => {
-      openWhatsApp("Bonjour, je souhaite commencer ma procédure pour les États-Unis.");
-    });
-  }
-
-  if (whatsappUSA) {
-    whatsappUSA.addEventListener('click', () => {
-      openWhatsApp("Bonjour, je souhaite commencer ma procédure pour les États-Unis.");
-    });
-  }
-});
-
+const whatsappUSA = document.getElementById('whatsappUSA');
+if (whatsappUSA) {
+  whatsappUSA.addEventListener('click', () => 
+    openWhatsAppWith('Bonjour, je souhaite commencer ma procédure pour les États-Unis.')
+  );
+}
