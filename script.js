@@ -76,12 +76,51 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Page-specific whatsapp buttons (country page)
-  const startFrance = document.getElementById('startFrance');
-  if(startFrance) startFrance.addEventListener('click', ()=> openWhatsAppWith('Bonjour, je souhaite commencer ma procédure pour la France.'));
+/* WHATSAPP BUTTONS — build message and open wa.me */
+  const whatsappNumber = '+221XXXXXXXX'; // <-- remplace avec ton numéro (format international)
+  function openWhatsAppWith(msg){
+    const text = encodeURIComponent(msg);
+    const url = `https://wa.me/${whatsappNumber.replace(/\D/g,'')}?text=${text}`;
+    window.open(url, '_blank');
+  }
 
-  const whatsappFrance2 = document.getElementById('whatsappFrance2');
-  if(whatsappFrance2) whatsappFrance2.addEventListener('click', ()=> openWhatsAppWith('Bonjour, je souhaite commencer ma procédure pour la France.'));
+  // main whatsapp CTA in header
+  const whatsappBtn = document.getElementById('whatsappBtn');
+  if(whatsappBtn) whatsappBtn.addEventListener('click', ()=> openWhatsAppWith('Bonjour, je souhaite des informations sur vos services.'));
+
+  const whatsappContact = document.getElementById('whatsappContact');
+  if(whatsappContact) whatsappContact.addEventListener('click', ()=> openWhatsAppWith('Bonjour, je souhaite des informations sur vos services.'));
+
+  // choose country buttons
+  document.querySelectorAll('.btn-choose').forEach(btn=>{
+    btn.addEventListener('click', e=>{
+      const country = e.currentTarget.dataset.country || 'un pays';
+      openWhatsAppWith(`Bonjour, je souhaite démarrer une procédure pour ${country}.`);
+    });
+  });
+
+function openWhatsAppWith(message) {
+  const phone = '221785635806'; // ton numéro complet
+  const urlDesktop = `whatsapp://send?phone=${phone}&text=${encodeURIComponent(message)}`;
+  const urlWeb = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+
+  // Tente d’ouvrir l’app desktop
+  window.location.href = urlDesktop;
+
+  // Si l’app desktop ne fonctionne pas, ouvre WhatsApp Web après un petit délai
+  setTimeout(() => {
+    window.open(urlWeb, '_blank');
+  }, 500);
+}
+
+
+// Sélectionne tous les boutons qui commencent par "start" ou "whatsapp"
+document.querySelectorAll('[data-whatsapp]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const country = btn.getAttribute('data-country'); // Récupère le pays
+    openWhatsAppWith(`Bonjour, je souhaite commencer ma procédure pour ${country}.`);
+  });
+});
 
   /* TESTIMONIALS — auto rotate */
   const testiSlides = Array.from(document.querySelectorAll('.testi-slide'));
@@ -115,37 +154,3 @@ document.addEventListener('DOMContentLoaded', () => {
 
 });
 
-// Fonction pour ouvrir WhatsApp avec un message spécifique
-function openWhatsAppWith(message) {
-  const phoneNumber = "221771234567"; // Remplace par ton numéro réel
-  const encodedMessage = encodeURIComponent(message);
-
-  // URL WhatsApp App / Desktop
-  const appUrl = `whatsapp://send?phone=${phoneNumber}&text=${encodedMessage}`;
-
-  // URL WhatsApp Web en fallback
-  const webUrl = `https://web.whatsapp.com/send?phone=${phoneNumber}&text=${encodedMessage}`;
-
-  const timeout = setTimeout(() => {
-    window.open(webUrl, "_blank"); // ouvre WhatsApp Web si Desktop non disponible
-  }, 500);
-
-  window.location.href = appUrl;
-
-  window.addEventListener("blur", () => clearTimeout(timeout)); // annule le fallback si App ouverte
-}
-
-// Boutons spécifiques USA
-const startUSA = document.getElementById('startUSA');
-if (startUSA) {
-  startUSA.addEventListener('click', () => 
-    openWhatsAppWith('Bonjour, je souhaite commencer ma procédure pour les États-Unis.')
-  );
-}
-
-const whatsappUSA = document.getElementById('whatsappUSA');
-if (whatsappUSA) {
-  whatsappUSA.addEventListener('click', () => 
-    openWhatsAppWith('Bonjour, je souhaite commencer ma procédure pour les États-Unis.')
-  );
-}
