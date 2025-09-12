@@ -115,3 +115,45 @@ document.addEventListener('DOMContentLoaded', () => {
 
 });
 
+// Ouvrir WhatsApp (Desktop, Mobile ou Web)
+function openWhatsApp(message) {
+  const encodedMessage = encodeURIComponent(message);
+  const whatsappNumber = "221771234567"; // Remplace par ton numéro réel
+
+  // URL WhatsApp Desktop / Mobile
+  const whatsappAppUrl = `whatsapp://send?phone=${whatsappNumber}&text=${encodedMessage}`;
+
+  // URL fallback Web
+  const whatsappWebUrl = `https://web.whatsapp.com/send?phone=${whatsappNumber}&text=${encodedMessage}`;
+
+  // Essaye d'ouvrir l'application WhatsApp
+  const timeout = setTimeout(() => {
+    // Si WhatsApp Desktop n'est pas installé, bascule vers WhatsApp Web
+    window.open(whatsappWebUrl, "_blank");
+  }, 500); // 500ms avant d'ouvrir fallback
+
+  // Essaie d’ouvrir WhatsApp App
+  window.location.href = whatsappAppUrl;
+
+  // Nettoie le timeout si l'utilisateur a réussi à ouvrir l'application
+  window.addEventListener("blur", () => clearTimeout(timeout));
+}
+
+// Attache les événements aux boutons
+document.addEventListener('DOMContentLoaded', () => {
+  const startUSA = document.getElementById('startUSA');
+  const whatsappUSA = document.getElementById('whatsappUSA');
+
+  if (startUSA) {
+    startUSA.addEventListener('click', () => {
+      openWhatsApp("Bonjour, je souhaite commencer ma procédure pour les États-Unis.");
+    });
+  }
+
+  if (whatsappUSA) {
+    whatsappUSA.addEventListener('click', () => {
+      openWhatsApp("Bonjour, je souhaite commencer ma procédure pour les États-Unis.");
+    });
+  }
+});
+
