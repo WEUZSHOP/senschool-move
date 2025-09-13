@@ -53,29 +53,44 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-const whatsappNumber = '221785635806'; // Remplace par ton numéro
+// Numéro WhatsApp (format international, sans + ou espaces)
+const whatsappNumber = '221XXXXXXXX'; // remplace avec ton numéro
 
+// Fonction pour ouvrir WhatsApp
 function openWhatsAppWith(message) {
   const text = encodeURIComponent(message);
   const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
   if (isMobile) {
-    // Mobile → ouvre WhatsApp
+    // Mobile : ouvre l'app WhatsApp directement
     window.location.href = `https://wa.me/${whatsappNumber}?text=${text}`;
   } else {
-    // Desktop → ouvre WhatsApp Web directement
-    const webLink = `https://web.whatsapp.com/send?phone=${whatsappNumber}&text=${text}`;
-    window.open(webLink, '_blank');
+    // PC : essaie Desktop d'abord
+    const desktopUrl = `whatsapp://send?phone=${whatsappNumber}&text=${text}`;
+    const webUrl = `https://web.whatsapp.com/send?phone=${whatsappNumber}&text=${text}`;
+    
+    // Crée un iframe pour tenter d'ouvrir Desktop
+    const iframe = document.createElement('iframe');
+    iframe.style.display = 'none';
+    iframe.src = desktopUrl;
+    document.body.appendChild(iframe);
+
+    // Si Desktop ne s'ouvre pas, redirige vers WhatsApp Web après 1s
+    setTimeout(() => {
+      window.open(webUrl, '_blank');
+      document.body.removeChild(iframe);
+    }, 1000);
   }
 }
 
-// Tous les boutons avec data-country
-document.querySelectorAll('[data-country]').forEach(btn => {
+// Sélectionne tous les boutons WhatsApp sur la page
+document.querySelectorAll('[data-whatsapp]').forEach(btn => {
   btn.addEventListener('click', () => {
-    const country = btn.getAttribute('data-country');
+    const country = btn.getAttribute('data-country') || 'votre pays';
     openWhatsAppWith(`Bonjour, je souhaite commencer ma procédure pour ${country}.`);
   });
 });
+
 
 
   /* TESTIMONIALS — auto rotate */
@@ -109,6 +124,7 @@ document.querySelectorAll('[data-country]').forEach(btn => {
   });
 
 });
+
 
 
 
