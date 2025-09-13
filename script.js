@@ -53,31 +53,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
- // Numéro WhatsApp (format international sans +)
-const whatsappNumber = '221XXXXXXXX'; // remplace par ton vrai numéro
+const whatsappNumber = '221785635806'; // Remplace par ton numéro
 
-// Fonction universelle pour ouvrir WhatsApp
 function openWhatsAppWith(message) {
   const text = encodeURIComponent(message);
   const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
   if (isMobile) {
-    // Mobile → ouvre l'application WhatsApp si installée, sinon WhatsApp Web
+    // Mobile → ouvre WhatsApp
     window.location.href = `https://wa.me/${whatsappNumber}?text=${text}`;
   } else {
-    // Desktop → tente l'application WhatsApp Desktop, sinon Web
-    const appLink = `whatsapp://send?phone=${whatsappNumber}&text=${text}`;
-    const webLink = `https://wa.me/${whatsappNumber}?text=${text}`;
-
-    // On ouvre l'app, si l'utilisateur n'a pas l'app, après 500ms on ouvre WhatsApp Web
-    window.location.href = appLink;
-    setTimeout(() => {
-      window.open(webLink, '_blank');
-    }, 500);
+    // Desktop → ouvre WhatsApp Web directement
+    const webLink = `https://web.whatsapp.com/send?phone=${whatsappNumber}&text=${text}`;
+    window.open(webLink, '_blank');
   }
 }
 
-// Sélectionne tous les boutons WhatsApp ou "Commencer ma procédure" avec data-country
+// Tous les boutons avec data-country
 document.querySelectorAll('[data-country]').forEach(btn => {
   btn.addEventListener('click', () => {
     const country = btn.getAttribute('data-country');
@@ -117,6 +109,7 @@ document.querySelectorAll('[data-country]').forEach(btn => {
   });
 
 });
+
 
 
 
