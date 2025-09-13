@@ -100,19 +100,20 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
 function openWhatsAppWith(message) {
-  const phone = '221785635806'; // ton numéro complet
-  const urlDesktop = `whatsapp://send?phone=${phone}&text=${encodeURIComponent(message)}`;
-  const urlWeb = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+  const phone = '221XXXXXXXX';
+  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
-  // Tente d’ouvrir l’app desktop
-  window.location.href = urlDesktop;
-
-  // Si l’app desktop ne fonctionne pas, ouvre WhatsApp Web après un petit délai
-  setTimeout(() => {
-    window.open(urlWeb, '_blank');
-  }, 500);
+  if (isMobile) {
+    // Ouvre WhatsApp mobile
+    window.location.href = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+  } else {
+    // Essaie l'app desktop d'abord, sinon WhatsApp Web
+    window.location.href = `whatsapp://send?phone=${phone}&text=${encodeURIComponent(message)}`;
+    setTimeout(() => {
+      window.open(`https://wa.me/${phone}?text=${encodeURIComponent(message)}`, '_blank');
+    }, 500);
+  }
 }
-
 
 // Sélectionne tous les boutons qui commencent par "start" ou "whatsapp"
 document.querySelectorAll('[data-whatsapp]').forEach(btn => {
@@ -153,4 +154,5 @@ document.querySelectorAll('[data-whatsapp]').forEach(btn => {
   });
 
 });
+
 
